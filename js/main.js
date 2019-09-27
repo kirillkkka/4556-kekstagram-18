@@ -22,11 +22,6 @@ var NAMES = [
   'Барни',
 ];
 
-var POST_COUNT = 25;   // количество постов
-var USERPIC_COUNT = 6; // количество аватаров для пользователей
-var DESCRIPTION = 'описание фотографии';
-
-
 // генератор случайного целого числа в заданном диапазоне min-max
 var getRandomInteger = function (min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
