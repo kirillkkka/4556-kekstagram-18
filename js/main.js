@@ -17,6 +17,8 @@ var NAMES = ['Гомер', 'Барт', 'Лиза', 'Мэгги', 'Мардж', '
 
 var POSTS_AMOUNT = 25;
 var USERPIC_AMOUNT = 6;
+var MIN_LIKES = 15;
+var MAX_LIKES = 200;
 
 // генератор случайного целого числа в заданном диапазоне min-max
 var getRandomInteger = function (min, max) {
@@ -26,26 +28,22 @@ var getRandomInteger = function (min, max) {
 
 // получаем услучайное количество лайков
 var getRandomLikes = function () {
-  return getRandomInteger(15, 200);
+  return getRandomInteger(MIN_LIKES, MAX_LIKES);
 };
 
 // случайный комментарий
 var getRandomComment = function (commentsArray) {
-  return commentsArray[getRandomInteger(1, 6)];
+  return commentsArray[getRandomInteger(0, commentsArray.length - 1)];
 };
 
 // адреса аватаров
 var getRandomUrl = function () {
-  var userpicUrlArray = [];
-  for (var i = 0; i < USERPIC_AMOUNT; i++) {
-    userpicUrlArray.push('img/avatar-' + (i + 1) + '.jpg');
-  }
-  return userpicUrlArray[getRandomInteger(1, 6)];
+  return 'img/avatar-' + getRandomInteger(1, USERPIC_AMOUNT) + '.jpg';
 };
 
 // имя пользователя
 var getRandomName = function (userNames) {
-  return userNames[getRandomInteger(0, 6)];
+  return userNames[getRandomInteger(0, userNames.length - 1)];
 };
 
 // описание поста с комментарием
@@ -64,11 +62,13 @@ var createPosts = function () {
       url: 'photos/' + (i + 1) + '.jpg',
       description: '',
       likes: getRandomLikes(),
-      comments: getRandomPost(
-          getRandomUrl(),
-          getRandomComment(COMMENTS),
-          getRandomName(NAMES)
-      )
+      comments: [
+        getRandomPost(
+            getRandomUrl(),
+            getRandomComment(COMMENTS),
+            getRandomName(NAMES)
+        )
+      ]
     };
     postArr.push(postObj);
   }
@@ -92,7 +92,7 @@ var renderPosts = function () {
     postItem.querySelector('.picture__img').src = generatedPosts[i].url;
     postItem.querySelector('.picture__likes').textContent =
       generatedPosts[i].likes;
-    postItem.querySelector('.picture__comments').textContent = '1';
+    postItem.querySelector('.picture__comments').textContent = generatedPosts[i].comments.length;
     fragment.appendChild(postItem);
   }
   gallery.appendChild(fragment);
