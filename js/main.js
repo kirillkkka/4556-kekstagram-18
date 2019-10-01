@@ -49,7 +49,7 @@ var getRandomName = function (userNames) {
 };
 
 // описание поста с комментарием
-var getRandomPost = function (avatar, comment, name) {
+var getRandomPost = function () {
   return {
     avatar: getRandomUrl(),
     message: getRandomComment(COMMENTS),
@@ -61,7 +61,7 @@ var createPosts = function () {
   var postArr = [];
   for (var i = 0; i < POSTS_AMOUNT; i++) {
     var postObj = {
-      url: 'photos/' + (i + 1) + ''.jpg,
+      url: 'photos/' + (i + 1) + '.jpg',
       description: '',
       likes: getRandomLikes(),
       comments: getRandomPost(
@@ -75,7 +75,7 @@ var createPosts = function () {
   return postArr;
 };
 
-var renderPosts = function (postTemplate, generatedPosts) {
+var renderPosts = function () {
   var postTemplate = document
     .querySelector('#picture')
     .content.querySelector('.picture');
