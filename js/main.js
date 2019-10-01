@@ -13,14 +13,10 @@ var COMMENTS = [
 
 // объявлем массив с именами пользователей
 
-var NAMES = [
-  'Гомер',
-  'Барт',
-  'Лиза',
-  'Мэгги',
-  'Мардж',
-  'Барни',
-];
+var NAMES = ['Гомер', 'Барт', 'Лиза', 'Мэгги', 'Мардж', 'Барни'];
+
+var POSTS_AMOUNT = 25;
+var USERPIC_AMOUNT = 6;
 
 // генератор случайного целого числа в заданном диапазоне min-max
 var getRandomInteger = function (min, max) {
@@ -35,13 +31,13 @@ var getRandomLikes = function () {
 
 // случайный комментарий
 var getRandomComment = function (commentsArray) {
-  return commentsArray [getRandomInteger(1, 6)];
+  return commentsArray[getRandomInteger(1, 6)];
 };
 
 // адреса аватаров
 var getRandomUrl = function () {
   var userpicUrlArray = [];
-  for (var i = 0; i < 6; i++) {
+  for (var i = 0; i < USERPIC_AMOUNT; i++) {
     userpicUrlArray.push('img/avatar-' + (i + 1) + '.jpg');
   }
   return userpicUrlArray[getRandomInteger(1, 6)];
@@ -55,45 +51,50 @@ var getRandomName = function (userNames) {
 // описание поста с комментарием
 var getRandomPost = function (avatar, comment, name) {
   return {
-    avatar: avatar,
-    message: comment,
-    name: name
+    avatar: getRandomUrl(),
+    message: getRandomComment(COMMENTS),
+    name: getRandomName(NAMES)
   };
 };
 
-// содаем шаблн для поста
-var postTemplate = document.querySelector('#picture')
-  .content
-  .querySelector('.picture');
-
-// собираем посты
-var getPosts = function () {
+var createPosts = function () {
   var postArr = [];
-  for (var i = 0; i < 25; i++) {
+  for (var i = 0; i < POSTS_AMOUNT; i++) {
     var postObj = {
-      url: 'photos/' + (i + 1) + '.jpg',
+      url: 'photos/' + (i + 1) + ''.jpg,
       description: '',
       likes: getRandomLikes(),
-      comments: getRandomPost(getRandomUrl(), getRandomComment(COMMENTS), getRandomName(NAMES))
+      comments: getRandomPost(
+          getRandomUrl(),
+          getRandomComment(COMMENTS),
+          getRandomName(NAMES)
+      )
     };
     postArr.push(postObj);
   }
+  return postArr;
+};
 
-  for (i = 0; i < 25; i++) {
+var renderPosts = function (postTemplate, generatedPosts) {
+  var postTemplate = document
+    .querySelector('#picture')
+    .content.querySelector('.picture');
+
+  var generatedPosts = createPosts();
+
+  var gallery = document.querySelector('.pictures');
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < generatedPosts.length; i++) {
     var postItem = postTemplate.cloneNode(true);
 
     // заполняем данными из массива
-    postItem.querySelector('.picture__img').src = postArr[i].url;
-    postItem.querySelector('.picture__likes').textContent = postArr[i].likes;
+    postItem.querySelector('.picture__img').src = generatedPosts[i].url;
+    postItem.querySelector('.picture__likes').textContent =
+      generatedPosts[i].likes;
     postItem.querySelector('.picture__comments').textContent = '1';
     fragment.appendChild(postItem);
   }
   gallery.appendChild(fragment);
 };
-
-// отображаем сгенирированные посты в .pictures
-var gallery = document.querySelector('.pictures');
-var fragment = document.createDocumentFragment();
-
-
-getPosts();
+renderPosts();
